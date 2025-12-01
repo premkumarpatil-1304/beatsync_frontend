@@ -21,7 +21,7 @@ export const CreateRoom = () => {
         setLoading(true);
 
         try {
-            const response = await axios.post('http://localhost:8000/room/create', {
+            const response = await axios.post('https://sync-backend-1lxu.onrender.com/room/create', {
                 username: username
             });
 

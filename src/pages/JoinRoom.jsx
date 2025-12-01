@@ -27,7 +27,7 @@ export const JoinRoom = () => {
         setLoading(true);
 
         try {
-            const response = await axios.post('http://localhost:8000/room/join', {
+            const response = await axios.post('https://sync-backend-1lxu.onrender.com/room/join', {
                 room_id: roomId.trim(),
                 username: username
             });
