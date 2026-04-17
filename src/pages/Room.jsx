@@ -9,6 +9,8 @@ import { MusicPlayer } from '../components/MusicPlayer';
 import { FileUpload } from '../components/FileUpload';
 import { UserList } from '../components/UserList';
 import { RoomInfo } from '../components/RoomInfo';
+import { ChatRoom } from '../components/ChatRoom';
+import { FloatingReactions } from '../components/FloatingReactions';
 
 export const Room = () => {
     const { roomId } = useParams();
@@ -17,6 +19,8 @@ export const Room = () => {
     const [currentTrack, setCurrentTrack] = useState(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [currentTime, setCurrentTime] = useState(0);
+    const [chatMessages, setChatMessages] = useState([]);
+    const [reactions, setReactions] = useState([]);
 
     const userId = sessionStorage.getItem('userId');
     const isHost = sessionStorage.getItem('isHost') === 'true';
@@ -60,6 +64,24 @@ export const Room = () => {
             case 'user_left':
                 toast.info('A user left the room');
                 fetchRoomInfo();
+                break;
+
+            case 'chat':
+                setChatMessages(prev => [...prev, data.data]);
+                break;
+
+            case 'reaction':
+                const windowWidth = typeof window !== 'undefined' ? window.innerWidth : 1000;
+                const startX = Math.random() * (windowWidth - 100);
+                const endX = startX + (Math.random() * 200 - 100);
+                const newReaction = { 
+                    id: Date.now() + Math.random().toString(), 
+                    emoji: data.data.emoji,
+                    startX,
+                    endX,
+                    duration: 3 + Math.random() * 2
+                };
+                setReactions((prev) => [...prev, newReaction]);
                 break;
 
             default:
@@ -114,6 +136,10 @@ export const Room = () => {
     const handleUploadSuccess = () => {
         fetchRoomInfo();
     };
+
+    const removeReaction = useCallback((id) => {
+        setReactions(prev => prev.filter(r => r.id !== id));
+    }, []);
 
     if (!roomData) {
         return (
@@ -215,9 +241,16 @@ export const Room = () => {
                         transition={{ delay: 0.3 }}
                     >
                         <UserList users={roomData.users} hostId={roomData.host_id} />
+                        <ChatRoom 
+                            sendMessage={sendMessage} 
+                            chatMessages={chatMessages} 
+                            currentUserId={userId} 
+                        />
                     </motion.div>
                 </div>
             </div>
+            
+            <FloatingReactions reactions={reactions} removeReaction={removeReaction} />
         </div>
     );
 };

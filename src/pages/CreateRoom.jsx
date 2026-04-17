@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import axios from 'axios';
+import { API_BASE_URL } from '../services/api';
 import { ArrowLeft, Sparkles } from 'lucide-react';
 
 export const CreateRoom = () => {
@@ -21,7 +22,7 @@ export const CreateRoom = () => {
         setLoading(true);
 
         try {
-            const response = await axios.post('https://sync-backend-1lxu.onrender.com/room/create', {
+            const response = await axios.post(`${API_BASE_URL}/room/create`, {
                 username: username
             });
 

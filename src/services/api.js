@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://sync-backend-1lxu.onrender.com';
+const API_BASE_URL = 'http://localhost:8000';
 
 export const createRoom = async (username) => {
     const response = await axios.post(`${API_BASE_URL}/room/create`, {
@@ -35,6 +35,10 @@ export const uploadMusic = async (roomId, file) => {
     );
     return response.data;
 };
+export const uploadUrl = async (roomId, url) => {
+    const response = await axios.post(`${API_BASE_URL}/upload-url/${roomId}`, { url });
+    return response.data;
+};
 
-export const WS_BASE_URL = 'https://sync-backend-1lxu.onrender.com';
+export const WS_BASE_URL = 'ws://localhost:8000';
 export { API_BASE_URL };
