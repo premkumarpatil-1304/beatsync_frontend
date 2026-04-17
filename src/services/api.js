@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// We use import.meta.env.VITE_API_BASE_URL.
+// Added the fallback so your live site doesn't break while you add env vars to your deployment platform!
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://beatsync-backend-6.onrender.com';
+
 
 export const createRoom = async (username) => {
     const response = await axios.post(`${API_BASE_URL}/room/create`, {
@@ -40,5 +43,6 @@ export const uploadUrl = async (roomId, url) => {
     return response.data;
 };
 
-export const WS_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// Convert http:// to ws:// and https:// to wss://
+export const WS_BASE_URL = API_BASE_URL ? API_BASE_URL.replace(/^http/, 'ws') : '';
 export { API_BASE_URL };
