@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://beatsync-backend-6.onrender.com';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://beatsync-backend-6.onrender.com';
 
 export const createRoom = async (username) => {
     const response = await axios.post(`${API_BASE_URL}/room/create`, {
@@ -40,5 +40,5 @@ export const uploadUrl = async (roomId, url) => {
     return response.data;
 };
 
-export const WS_BASE_URL = 'ws://localhost:8000';
+export const WS_BASE_URL = import.meta.env.VITE_WS_BASE_URL || 'ws://localhost:8000';
 export { API_BASE_URL };
