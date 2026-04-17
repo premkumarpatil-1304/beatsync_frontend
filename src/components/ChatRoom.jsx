@@ -38,16 +38,17 @@ export const ChatRoom = ({ sendMessage, chatMessages, currentUserId }) => {
         <div className="glass-card flex flex-col  h-[400px] rounded-2xl border-blue-500 border-1 overflow-hidden mt-31">
             <div className="bg-zinc-900/50 p-4 border-b border-zinc-800 flex justify-between items-center">
                 <h3 className="font-bold text-blue-400">Room Chat</h3>
-                <div className="flex gap-2">
+                <div className="flex gap-1.5 md:gap-2 overflow-x-auto custom-scrollbar pb-1">
                     {QUiCK_EMOJIS.map(emoji => (
                         <motion.button
                             key={emoji}
-                            whileHover={{ scale: 1.2 }}
-                            whileTap={{ scale: 0.9 }}
+                            whileHover={{ scale: 1.2, rotate: [-10, 10, -10, 10, 0] }}
+                            whileTap={{ scale: 0.85 }}
                             onClick={() => handleReaction(emoji)}
-                            className="text-lg hover:bg-zinc-800 p-1 rounded-md transition-colors"
+                            className="text-xl md:text-2xl p-1.5 md:p-2 bg-zinc-800/40 hover:bg-zinc-700/80 rounded-xl transition-all shadow-[0_0_10px_rgba(255,255,255,0.02)] hover:shadow-[0_0_20px_rgba(0,240,255,0.3)] border border-zinc-700/30 hover:border-cyan-500/50 flex-shrink-0"
+                            title={`Send ${emoji} reaction`}
                         >
-                            {emoji}
+                            <span className="filter drop-shadow-lg">{emoji}</span>
                         </motion.button>
                     ))}
                 </div>
