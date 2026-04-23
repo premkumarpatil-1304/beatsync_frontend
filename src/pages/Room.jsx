@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Wifi, WifiOff } from 'lucide-react';
@@ -22,6 +22,9 @@ export const Room = () => {
     const [chatMessages, setChatMessages] = useState([]);
     const [reactions, setReactions] = useState([]);
 
+    // Getter populated by MusicPlayer — always returns the live audio.currentTime
+    const getLiveTimeRef = useRef(() => 0);
+
     const userId = sessionStorage.getItem('userId');
     const isHost = sessionStorage.getItem('isHost') === 'true';
 
@@ -42,7 +45,8 @@ export const Room = () => {
                 break;
 
             case 'play':
-                setCurrentTrack(data.data.current_track);
+                // Do NOT update currentTrack here — track only changes on new_track.
+                // Calling setCurrentTrack would trigger audio.load() and reset position.
                 setIsPlaying(true);
                 setCurrentTime(data.data.current_time);
                 break;
@@ -112,17 +116,20 @@ export const Room = () => {
     }, [roomId, userId, navigate]);
 
     const handlePlay = () => {
+        // Use live audio position so the server timestamp is always accurate
+        const liveTime = getLiveTimeRef.current();
         sendMessage({
             type: 'play',
             track_url: currentTrack,
-            current_time: currentTime,
+            current_time: liveTime,
         });
     };
 
     const handlePause = () => {
+        const liveTime = getLiveTimeRef.current();
         sendMessage({
             type: 'pause',
-            current_time: currentTime,
+            current_time: liveTime,
         });
     };
 
@@ -225,6 +232,7 @@ export const Room = () => {
                             onPlay={handlePlay}
                             onPause={handlePause}
                             onSeek={handleSeek}
+                            onGetLiveTime={(getter) => { getLiveTimeRef.current = getter; }}
                         />
 
                         <FileUpload

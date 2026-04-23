@@ -53,7 +53,7 @@ export const FloatingReactions = ({ reactions, removeReaction }) => {
                                 y: -(windowHeight + 150),
                                 x: controlPoints,
                                 rotate: rotatePath,
-                                scale: [0.5, 2.5, 2.5, 1] 
+                                scale: [0.5, 1.2, 1.2, 0.8] 
                             }}
                             exit={{ opacity: 0 }}
                             transition={{ 
@@ -62,9 +62,9 @@ export const FloatingReactions = ({ reactions, removeReaction }) => {
                                 times: [0, 0.2, 0.8, 1] // map opacity array
                             }}
                             onAnimationComplete={() => removeReaction(reaction.id)}
-                            className="absolute bottom-10 text-5xl md:text-6xl"
+                            className="absolute bottom-10 text-2xl md:text-3xl"
                             style={{
-                                filter: `drop-shadow(0 0 25px ${glowColor}) drop-shadow(0 0 10px rgba(255,255,255,0.5))`
+                                filter: `drop-shadow(0 0 8px ${glowColor}) drop-shadow(0 0 3px rgba(255,255,255,0.8))`
                             }}
                         >
                             {reaction.emoji}
